@@ -357,7 +357,10 @@ export const DataProviderMixin = (superClass) =>
           } else if (params.parentItem) {
             cache.size = items.length;
           }
-
+          // Note(CG): We set size to grid cache so that the grid is notified of size change - only for array provider
+          if (this.items) {
+            cache.grid.size = items.length
+          }
           const currentItems = Array.from(this.$.items.children).map((row) => row._item);
 
           // Populate the cache with new items
