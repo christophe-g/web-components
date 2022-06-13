@@ -5,6 +5,7 @@
  */
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { ComboBoxScroller } from '@vaadin/combo-box/src/vaadin-combo-box-scroller.js';
+import adjustTextColor from './adjust-text-color';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
@@ -22,6 +23,23 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
     super.ready();
 
     this.setAttribute('aria-multiselectable', 'true');
+  }
+  /** @private */
+  __updateElement(el, index) {
+    super.__updateElement(el, index);
+    const comboBox = this.comboBox;
+    let background;
+    
+    if(comboBox && (background = comboBox._getItemColor(el.item, comboBox.itemColorPath))) {
+      el.style.backgroundColor = background;
+      el.style.color = adjustTextColor(background);
+      // we add a class so that the checkbox can inherit the color
+      el.classList.add('custom-color');
+    } else {
+      el.classList.remove('custom-color');
+    }
+    el.toggleAttribute('readonly', this.comboBox.readonly);
+    
   }
 
   /** @private */
@@ -43,12 +61,6 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
     return this.comboBox._findIndex(item, this.comboBox.selectedItems, itemIdPath) > -1;
   }
 
-  /** @private */
-  __updateElement(el, index) {
-    super.__updateElement(el, index);
-
-    el.toggleAttribute('readonly', this.comboBox.readonly);
-  }
 }
 
 customElements.define(MultiSelectComboBoxScroller.is, MultiSelectComboBoxScroller);

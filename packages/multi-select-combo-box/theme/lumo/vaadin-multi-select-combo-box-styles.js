@@ -19,6 +19,10 @@ registerStyles(
         cursor: default;
       }
     }
+    /* Checkmark - allow to inherit color from above */
+    :host(.custom-color) [part='checkmark']::before {
+      color: inherit;
+    }
   `,
   {
     moduleId: 'lumo-multi-select-combo-box-item',

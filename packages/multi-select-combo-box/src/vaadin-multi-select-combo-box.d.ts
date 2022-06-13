@@ -283,6 +283,11 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * Note: modifying the selected items creates a new array each time.
    */
   selectedItems: TItem[];
+  
+  /** 
+   * the value to read. Array of selected-items values
+   */ 
+  selectedValue: string[];
 
   /**
    * Total number of items.

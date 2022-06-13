@@ -16,6 +16,7 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import adjustTextColor from './adjust-text-color';
 
 const multiSelectComboBox = css`
   :host {
@@ -104,6 +105,10 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
  *
+ * Property              | Description
+ * ----------------------|-----------------
+ * `selectedValue`       | the value to read. Array of selected-items values
+ * 
  * The following custom CSS properties are available for styling:
  *
  * Custom property                                      | Description                | Default
@@ -184,6 +189,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           >
             <vaadin-multi-select-combo-box-chip
               id="overflow"
+              style$="[[_getChipStyle(item, itemColorPath)]]"
               slot="prefix"
               part$="[[_getOverflowPart(_overflowItems.length)]]"
               disabled="[[disabled]]"
@@ -246,7 +252,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: String,
         value: 'label',
       },
-
+      
+      /**
+       * The item property used for a background color of the item.
+       * @attr {string} item-label-path
+       */
+      itemColorPath: {
+        type: String
+      },
+      
       /**
        * Path for the value of the item. If `items` is an array of objects,
        * this property is used as a string value for the selected item.
@@ -675,6 +689,34 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return item && Object.prototype.hasOwnProperty.call(item, this.itemLabelPath) ? item[this.itemLabelPath] : item;
   }
 
+
+  /**
+   * Returns the item backgroundColor.
+   * @protected
+   */
+    _getItemColor(item, itemColorPath) {
+    return item && Object.prototype.hasOwnProperty.call(item, itemColorPath) ? item[itemColorPath] : '';
+  }
+
+  /**
+   * Returns the item backgroundColor.
+   * @protected
+   */
+  _getItemValue(item, itemValuePath) {
+    return item && Object.prototype.hasOwnProperty.call(item, itemValuePath) ? item[itemValuePath] : '';
+  }
+
+  /** @private */
+  _getChipStyle(item, itemColorPath) {
+    if(itemColorPath) {
+      const color = this._getItemColor(item, itemColorPath)
+      if(color) {
+        return `--chip-text-color: ${adjustTextColor(color)};--chip-background-color: ${color};`
+      }
+    }
+    return ''
+  }
+
   /** @private */
   _getOverflowLabel(length) {
     return length;
@@ -706,6 +748,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   _mergeItemLabels(items) {
     return items.map((item) => this._getItemLabel(item)).join(', ');
+  }
+  
+  /** @public */
+  // we cannot have value, which clash with InputMixin. Selected value is the property to read from outside
+  get selectedValue() {
+   return (this.selectedItems || []).map((item) => this._getItemValue(item, this.itemValuePath));
   }
 
   /** @private */
@@ -791,7 +839,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     chip.item = item;
     chip.disabled = this.disabled;
     chip.readonly = this.readonly;
-
+    chip.style= this._getChipStyle(item, this.itemColorPath);
     const label = this._getItemLabel(item);
     chip.label = label;
     chip.setAttribute('title', label);
