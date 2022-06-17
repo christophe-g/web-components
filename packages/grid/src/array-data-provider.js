@@ -6,7 +6,7 @@
  * @returns {*}
  */
 function get(path, object) {
-  return path.split('.').reduce((obj, property) => obj[property], object);
+  return path.split('.').reduce((obj, property) => obj && obj[property], object);
 }
 
 /**
