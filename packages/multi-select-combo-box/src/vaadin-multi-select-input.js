@@ -311,7 +311,7 @@ export class MultiselectInput extends PatternMixin(InputFieldMixin(ThemableMixin
   }
 
   _checkHasValue() {
-    this.toggleAttribute('has-value', Boolean(this.inputElement.value || this.items?.length));
+    this.toggleAttribute('has-value', Boolean(this.inputElement?.value || this.items?.length));
   }
 
   _dispatchItemsChanged(items) {
