@@ -15,7 +15,7 @@ const chip = css`
     margin-inline-end: 0.25rem;
     padding: 0 0.5rem;
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.08);
+    background-color: var(--chip-background-color, rgba(0, 0, 0, 0.08));
     cursor: default;
     font-family: var(--material-font-family);
   }
@@ -72,12 +72,14 @@ const chip = css`
   [part='label'] {
     font-size: var(--material-caption-font-size);
     line-height: 1;
-    color: var(--material-body-text-color);
+    color: var(--chip-text-color, var(--material-body-text-color));
+    
   }
 
   /* Override field button */
-  [part='remove-button'] {
+  [part$='button'] {
     display: flex;
+    color:  var(--chip-text-color, hsla(0, 0%, 100%, 0.9));
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -87,6 +89,9 @@ const chip = css`
     line-height: 20px;
     padding: 0;
     font-size: 0.75em;
+  }
+  :host(:not([readonly])) [part$='button']:hover {
+     color:  var(--chip-text-color, hsla(0, 0%, 100%, 0.9));
   }
 
   [part='remove-button']::before {

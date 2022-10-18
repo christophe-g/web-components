@@ -18,7 +18,7 @@ const chip = css`
     padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     color: var(--lumo-body-text-color);
     border-radius: var(--lumo-border-radius-s);
-    background-color: var(--lumo-contrast-20pct);
+    background-color: var(--chip-background-color, var(--lumo-contrast-20pct));
     cursor: var(--lumo-clickable-cursor);
   }
 
@@ -79,6 +79,7 @@ const chip = css`
 
   [part='label'] {
     font-weight: 500;
+    color: var(--chip-text-color, var(--lumo-body-text-color));
     line-height: 1.25;
   }
 
@@ -93,6 +94,7 @@ const chip = css`
     height: 1.25em;
     font-size: 1.5em;
     transition: none;
+    color: var(--chip-text-color, var(--lumo-contrast-60pct));
   }
 
   [part='remove-button']::before {
