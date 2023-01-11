@@ -139,7 +139,7 @@ export declare class DataProviderMixinClass<TItem> {
   /**
    * Clears the cached pages and reloads data from dataprovider when needed.
    */
-  clearCache(): void;
+  clearCache(tem?: TItem): void;
 
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
