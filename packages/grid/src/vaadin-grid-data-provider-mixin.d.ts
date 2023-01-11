@@ -137,5 +137,5 @@ export declare class DataProviderMixinClass<TItem> {
   /**
    * Clears the cached pages and reloads data from dataprovider when needed.
    */
-  clearCache(): void;
+  clearCache(item?: TItem): void;
 }

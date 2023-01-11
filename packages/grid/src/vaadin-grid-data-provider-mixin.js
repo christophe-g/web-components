@@ -98,6 +98,22 @@ export const ItemCache = class ItemCache {
     }
     return { cache: this, scaledIndex: thisLevelIndex };
   }
+  
+  _getCache(item, find) {
+    // Note(cg): search items in the current cache.
+    if (Object.keys(this.items).some(k => find(item, this.items[k]))) {
+      return this;
+    }
+    // Note(cg): otherwise check subCaches recursively.
+    let result;
+    Object.keys(this.itemCaches).some(k => {
+      const cache = this.itemCaches[k];
+      if (result = cache._getCache(item, find)) {
+        return true; // Note(cg): stop Array.some.
+      }
+    });
+    return result;
+  }
 };
 
 /**
@@ -288,6 +304,14 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /**
+     * get the cache containing item
+     * @return {Vaadin.Grid.ItemCache}      the cache containing item.
+     */
+     getCache(item) {
+       return this._cache._getCache(item, this._itemsEqual.bind(this));
+     }
+
+    /**
      * Returns a value that identifies the item. Uses `itemIdPath` if available.
      * Can be customized by overriding.
      * @param {!GridItem} item
@@ -385,7 +409,7 @@ export const DataProviderMixin = (superClass) =>
           }
           // Note(CG): We set size to grid cache so that the grid is notified of size change - only for array provider
           if (this.items) {
-            cache.grid.size = items.length
+            cache.grid.size = size || items.length
           }
           const currentItems = Array.from(this.$.items.children).map((row) => row._item);
 
@@ -440,16 +464,29 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * Clears the cached pages and reloads data from dataprovider when needed.
+     * When an item is provided, will only clear - an reload - cache containing this item.
+     *
+     * @param  {Object}   item - a model to find
      */
-    clearCache() {
-      this._cache = new ItemCache(this);
-      this._cache.size = this.size || 0;
-      this._cache.updateSize();
-      this._hasData = false;
-      this.__updateVisibleRows();
+    clearCache(item) {
+      const cache = item && this.getCache(item);
+      const parentCache = cache && cache.parentCache;
 
-      if (!this._effectiveSize) {
-        this._loadPage(0, this._cache);
+      if (parentCache) {
+        const caches = parentCache.itemCaches;
+        const index = Object.keys(caches).find(key => caches[key] === cache);
+        caches[index] = null;
+        parentCache.ensureSubCacheForScaledIndex(index);
+      } else {
+        this._cache = new ItemCache(this);
+        this._cache.size = this.size || 0;
+        this._cache.updateSize();
+        this._hasData = false;
+        this.__updateVisibleRows();
+
+        if (!this._effectiveSize) {
+          this._loadPage(0, this._cache);
+        }
       }
     }
 
