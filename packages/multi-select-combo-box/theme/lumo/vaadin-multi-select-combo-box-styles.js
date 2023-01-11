@@ -23,6 +23,10 @@ const multiSelectComboBoxItem = css`
       cursor: default;
     }
   }
+  /* Checkmark - allow to inherit color from above */
+  :host(.custom-color) [part='checkmark']::before {
+    color: inherit;
+  }
 `;
 
 registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiSelectComboBoxItem], {
