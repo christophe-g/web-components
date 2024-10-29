@@ -98,7 +98,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   hostDisconnected(): void;
 
   /**
-   * Whether the root cache or any of its decendant caches have pending requests.
+   * Whether the root cache or any of its descendant caches have pending requests.
    */
   isLoading(): boolean;
 
@@ -123,9 +123,12 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   recalculateFlatSize(): void;
 
   /**
-   * Clears the cache.
+   * Clears the cache. If an item is provided, it tries to 
+   * clear sub-cache holding the item. This is useful for
+   * tree-grid scenarios, when only single notes need to be 
+   * reloaded.
    */
-  clearCache(): void;
+  clearCache(item?: TItem): void;
 
   /**
    * Returns context for the given flattened index, including:
@@ -161,14 +164,14 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   /**
    * Requests the data provider to load the page with the item corresponding
    * to the given flattened index. If the item is already loaded, the method
-   * returns immediatelly.
+   * returns immediately.
    */
   ensureFlatIndexLoaded(flatIndex: number): void;
 
   /**
    * Creates a sub-cache for the item corresponding to the given flattened index and
    * requests the data provider to load the first page into the created sub-cache.
-   * If the sub-cache already exists, the method returns immediatelly.
+   * If the sub-cache already exists, the method returns immediately.
    */
   ensureFlatIndexHierarchy(flatIndex: number): void;
 
