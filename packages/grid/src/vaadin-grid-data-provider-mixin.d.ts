@@ -113,9 +113,13 @@ export declare class DataProviderMixinClass<TItem> {
   collapseItem(item: TItem): void;
 
   /**
-   * Clears the cached pages and reloads data from dataprovider when needed.
+   * Clears the cached pages for a given item, or clear the cache when no item is provided,  
+   * and reloads data from dataprovider when needed.
+   *
+   * @param {TItem} item - The item for which the cache should be cleared. 
+   * If no item is provided, the entire cache is cleared.
    */
-  clearCache(): void;
+  clearCache(item?: TItem): void;
 
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
