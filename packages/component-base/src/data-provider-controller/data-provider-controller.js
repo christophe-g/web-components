@@ -142,9 +142,19 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Clears the cache.
+   * Clears the cache. If an item is provided, it tries to 
+   * clear sub-cache holding the item. This is useful for
+   * tree-grid scenarios, when only single notes need to be 
+   * reloaded.
    */
-  clearCache() {
+  clearCache(item) {
+    if (item) {
+      const { cache } = this.getItemContext(item) || {};
+      if (cache?.parentCache) {
+        cache.parentCache.removeSubCache(cache.parentCacheIndex);
+        return;
+      }
+    }
     this.rootCache = this.__createRootCache(this.rootCache.size);
   }
 

@@ -380,13 +380,20 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /**
-     * Clears the cached pages and reloads data from dataprovider when needed.
+     * Clears the cached pages for a given item, or clear the cache when no item is provided,  
+     * and reloads data from dataprovider when needed.
+     *
+     * @param {Object} item - The item for which the cache should be cleared. 
+     * If no item is provided, the entire cache is cleared.
      */
-    clearCache() {
-      this._dataProviderController.clearCache();
+    clearCache(item) {
+      this._dataProviderController.clearCache(item);
+
       this._dataProviderController.rootCache.size = this.size;
       this._dataProviderController.recalculateFlatSize();
-      this._hasData = false;
+      if (!item) {
+        this._hasData = false;
+      }
       this.__updateVisibleRows();
 
       if (!this.__virtualizer || !this.__virtualizer.size) {
