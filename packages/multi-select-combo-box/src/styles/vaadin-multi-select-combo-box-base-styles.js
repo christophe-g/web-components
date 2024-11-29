@@ -59,5 +59,10 @@ export const multiSelectComboBoxStyles = [
     :host([auto-expand-horizontally]) [class$='container'] {
       width: auto;
     }
+    
+    /* Checkmark - allow to inherit color from above */
+    :host(.custom-color) [part='checkmark']::before {
+      color: inherit;
+     }
   `,
 ];
