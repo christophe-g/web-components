@@ -11,6 +11,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import adjustTextColor from './adjust-text-color.js';
 
 /**
  * @polymerMixin
@@ -109,6 +110,14 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: String,
           value: 'value',
           sync: true,
+        },
+
+        /**
+         * The item property used for a background color of the item.
+         * @attr {string} item-color-path
+         */
+        itemColorPath: {
+          type: String
         },
 
         /**
@@ -661,6 +670,42 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return items.map((item) => this._getItemLabel(item)).join(', ');
     }
 
+    /**
+     * Returns the item backgroundColor.
+     * @protected
+     */
+    _getItemColor(item, itemColorPath) {
+      return item && Object.prototype.hasOwnProperty.call(item, itemColorPath) ? item[itemColorPath] : '';
+    }
+  
+    /**
+     * Returns the item backgroundColor.
+     * @protected
+     */
+    _getItemValue(item, itemValuePath) {
+      return item && Object.prototype.hasOwnProperty.call(item, itemValuePath) ? item[itemValuePath] : '';
+    }
+  
+    /** @private */
+    _getChipStyle(item, itemColorPath) {
+      if(itemColorPath) {
+        const color = this._getItemColor(item, itemColorPath)
+        const adjustedColor = adjustTextColor(color);
+        if(color) {
+          return `--chip-text-color: ${adjustedColor}; --material-disabled-text-color: ${adjustedColor};--chip-background-color: ${color};`
+        }
+      }
+      return ''
+    }
+    
+    
+    /** @public */
+    // we cannot have value, which clash with InputMixin. Selected value is the property to read from outside
+    get selectedValue() {
+    return (this.selectedItems || []).map((item) => this._getItemValue(item, this.itemValuePath));
+    }
+    
+
     /** @private */
     _findIndex(item, selectedItems, itemIdPath) {
       if (itemIdPath && item) {
@@ -771,6 +816,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       chip.item = item;
       chip.disabled = this.disabled;
       chip.readonly = this.readonly;
+      chip.style= this._getChipStyle(item, this.itemColorPath);
 
       const label = this._getItemLabel(item);
       chip.label = label;

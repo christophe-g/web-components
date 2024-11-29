@@ -221,6 +221,11 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * Note: modifying the selected items creates a new array each time.
    */
   selectedItems: TItem[];
+  
+  /** 
+   * the value to read. Array of selected-items values
+   */ 
+  selectedValue: string[];
 
   /**
    * Set to true to group selected items at the top of the overlay.
