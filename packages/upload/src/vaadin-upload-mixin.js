@@ -459,9 +459,8 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
       this.addEventListener('upload-error', this._onUploadError.bind(this));
 
-      this._addButtonController = new AddButtonController(this);
-      this.addController(this._addButtonController);
-
+      this.setAddController();
+      
       this._dropLabelController = new DropLabelController(this);
       this.addController(this._dropLabelController);
 
@@ -474,6 +473,12 @@ export const UploadMixin = (superClass) =>
       );
 
       this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
+    }
+
+    /** @protected */
+    setAddController() {
+      this._addButtonController = new AddButtonController(this);
+      this.addController(this._addButtonController);
     }
 
     /** @private */
