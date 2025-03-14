@@ -201,7 +201,7 @@ export const cardStyles = css`
     align-self: end;
   }
 
-  :host(:not([theme~='horizontal'])) ::slotted([slot='media']:is(img, video, svg)) {
+  :host(:not([theme~='horizontal'])) ::slotted([slot='media']:is(img, video, svg, .media)) {
     max-width: 100%;
   }
 
@@ -210,7 +210,7 @@ export const cardStyles = css`
   }
 
   :host(:is([theme~='cover-media'], [theme~='stretch-media']))
-    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    ::slotted([slot='media']:is(img, video, svg, .media, vaadin-icon)) {
     aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
     height: auto;
     object-fit: cover;
@@ -224,12 +224,12 @@ export const cardStyles = css`
   }
 
   :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
-    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    ::slotted([slot='media']:is(img, video, svg, .media, vaadin-icon)) {
     aspect-ratio: auto;
     height: 100%;
   }
 
-  :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, .media, vaadin-icon)) {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-end-start-radius: 0;
@@ -239,7 +239,7 @@ export const cardStyles = css`
     width: calc(100% + var(--_padding) * 2);
   }
 
-  :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, .media, vaadin-icon)) {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-start-end-radius: 0;
