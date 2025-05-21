@@ -41,16 +41,6 @@
     "@vaadin/vaadin-themable-mixin": "25.0.0-beta4",
     "lit": "^3.0.0"
   },
-  "overrides": {
-    "@vaadin/a11y-base": "link:../a11y-base",
-    "@vaadin/button": "link:../button",
-    "@vaadin/component-base": "link:../component-base",
-    "@vaadin/progress-bar": "link:../progress-bar",
-    "@vaadin/vaadin-lumo-styles": "link:../vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "link:../vaadin-material-styles",
-    "@vaadin/vaadin-themable-mixin": "link:../vaadin-themable-mixin"
-    
-  },
   "devDependencies": {
     "@vaadin/chai-plugins": "25.0.0-beta4",
     "@vaadin/test-runner-commands": "25.0.0-beta4",
