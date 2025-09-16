@@ -7,16 +7,16 @@ import { getLumoInjectorPropName, LumoInjector } from './src/lumo-injector.js';
 
 /**
  * @type {Set<string>}
- */
+  */
 const registeredProperties = new Set();
 
 /**
  * Find enclosing root for given element to gather style rules from.
  *
  * @param {HTMLElement} element
- * @return {DocumentOrShadowRoot}
- */
-export function findRoot(element) {
+  * @return {DocumentOrShadowRoot}
+   */
+function findRoot(element) {
   const root = element.getRootNode();
 
   if (root.host && root.host.constructor.version) {
@@ -48,12 +48,16 @@ export const LumoInjectionMixin = (superClass) =>
         // so that changing it to 1 would inject styles to instances
         // Use `inherits: true` so that property defined on `<html>`
         // would apply to components instances within shadow roots
-        CSS.registerProperty({
-          name: propName,
-          syntax: '<number>',
-          inherits: true,
-          initialValue: '0',
-        });
+        try {
+          CSS.registerProperty({
+            name: propName,
+            syntax: '<number>',
+            inherits: true,
+            initialValue: '0',
+          });
+        } catch (e) {  
+          console.warn('Could not register CSS property', e);
+        }
       }
     }
 
@@ -64,7 +68,7 @@ export const LumoInjectionMixin = (superClass) =>
       };
     }
 
-    /** @protected */
+    /**  @protected */
     connectedCallback() {
       super.connectedCallback();
 
@@ -76,7 +80,7 @@ export const LumoInjectionMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**  @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
